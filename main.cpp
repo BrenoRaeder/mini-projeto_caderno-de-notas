@@ -1,4 +1,5 @@
 #include <iostream>
+#include <vector>
 
 #include "estilo.h"
 #include "notas.h"
@@ -10,6 +11,8 @@ int main()
     int opc = 1;
     bool sair = false;
 
+    configuracoesCores();
+
     while(!sair)
     {
         menu();
@@ -18,16 +21,16 @@ int main()
         switch(opc)
         {
             case 1:
-            addNotas();
-            break;
+            addNotas(); break;
+            
+            case 2: 
+            excluiNota(); break;
             
             case 3: 
-            leNotas();
-            break;
+            leNotas(); break;
 
             case 4:
-            opcCor();
-            break;
+            opcCor(); break;
 
             case 0: 
             sair=true;

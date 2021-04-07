@@ -1,12 +1,15 @@
 #include <iostream>
 #include <windows.h>
 #include <conio.h>
+#include <fstream>
+#include <vector>
 
 #include "estilo.h"
+#include "notas.h"
 
 using namespace std;
 
-//\xDB
+int letra, fundo; 
 
 COORD xy = {0, 0};
 
@@ -53,6 +56,14 @@ void corConsole(int ForgC, int BackC)
      return;
 }
 
+void imprimeMolduraNota(int y)
+{
+     gotoxy(0,y);
+     for(int i=0;i<80;i++) cout << "\xdb";
+     gotoxy(0,y+10);
+     for(int i=0;i<80;i++) cout << "\xdb";
+}
+
 void imprimeMoldura(int y)
 {
      system("cls");
@@ -69,7 +80,9 @@ void imprimeMoldura(int y)
 }
 
 void opcCor()
-{
+{    
+     
+
      imprimeMoldura(9); //mandadno a altura da moldura
      gotoxy(24,5); cout << "1. Cor de fundo"; 
      gotoxy(24,7); cout << "2. Cor do texto";
@@ -110,23 +123,32 @@ void opcCor()
           switch(opc)
           {
                case 1:
-               corConsole(15,0); break;
+               corConsole(15,0); 
+               letra = 0; break;
                case 2:
-               corConsole(15,1); break;
+               corConsole(15,1); 
+               letra = 1; break;
                case 3:
-               corConsole(15,2); break;
+               corConsole(15,2); 
+               letra = 2; break;
                case 4:
-               corConsole(15,3); break;
+               corConsole(15,3); 
+               letra = 3; break;
                case 5:
-               corConsole(15,4); break;
+               corConsole(15,4); 
+               letra = 4; break;
                case 6:
-               corConsole(15,5); break;
+               corConsole(15,5); 
+               letra = 5; break;
                case 7:
-               corConsole(15,6); break;
+               corConsole(15,6); 
+               letra = 6; break;
                case 8:
-               corConsole(15,14); break;
+               corConsole(15,14); 
+               letra = 14; break;
                case 9:
-               corConsole(15,8); break;
+               corConsole(15,8); 
+               letra = 8; break;
           }
      }
      else 
@@ -158,25 +180,90 @@ void opcCor()
           switch(opc)
           {
                case 1:
-               corLetra(15); break;
+               corLetra(15); 
+               fundo = 15; break;
                case 2:
-               corLetra(9); break;
+               corLetra(9); 
+               fundo = 9; break;
                case 3:
-               corLetra(10); break;
+               corLetra(10); 
+               fundo = 10; break;
                case 4:
-               corLetra(11); break;
+               corLetra(11); 
+               fundo = 11; break;
                case 5:
-               corLetra(12); break;
+               corLetra(12); 
+               fundo = 12; break;
                case 6:
-               corLetra(13); break;
+               corLetra(13); 
+               fundo = 13; break;
                case 7:
-               corLetra(6); break;
+               corLetra(6); 
+               fundo = 6; break;
                case 8:
-               corLetra(14); break;
+               corLetra(14); 
+               fundo = 14; break;
                case 9:
-               corLetra(7); break;
+               corLetra(7); 
+               fundo = 7; break;
           }
-     }  
+     } 
+
+     gravaCor(letra,fundo); 
+}
+
+vector<int> leCorArquivo()
+{
+     ifstream (arquivo);
+     arquivo.open("cores.txt");
+
+     if(arquivo.is_open())
+     {
+          vector<int> configuracao_cores;
+          for(int i=0; i<2;i++)
+          {
+               int num;
+               arquivo >> num;
+               configuracao_cores.push_back(num);
+          } 
+
+          arquivo.close();
+          return configuracao_cores;
+     }
+     else
+     {
+          cout << "Erro na leitura do arquivo." << endl;
+          exit(0);
+     }
+}
+
+void gravaCor(int letra, int fundo)
+{
+     ofstream arquivo;
+     arquivo.open("cores.txt");
+
+     if(arquivo.is_open())
+     {
+          arquivo << letra << endl;
+          arquivo << fundo << endl;
+
+          arquivo.close();
+     }
+     else
+     {
+          cout << "Erro na leitura do arquivo." << endl;
+          exit(0);
+     }
+}
+
+void configuracoesCores()
+{
+     vector<int> config = leCorArquivo();
+     
+     letra = config[1];
+     fundo = config[0];
+     corConsole(15,fundo);
+     corLetra(letra);
 }
 
 void menu()
@@ -202,7 +289,8 @@ void menu()
     cout << "\xdb\xdb\xdb\xb2 0. Sair" << endl;
     gotoxy(23, y); y+=2;
     for(int i=0;i<34;i++) cout << "\xB2";
-    gotoxy(23, y);
-
+    gotoxy(27,y); y+=2;
+    cout << "Quantidade de nota(s): " << qtdNotas();
+    gotoxy(27,y);
 }
 

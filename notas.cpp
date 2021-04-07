@@ -35,8 +35,15 @@ void addNotas()
 
     string nome_materia;
     string nota;
-    cout << "Digite o nome da materia que vc deseja adicionar: " << endl;
+    imprimeMoldura(8);
+    gotoxy(24,5); 
+    cout << "\xb2 Digite o nome da materia que";
+    gotoxy(24,6);
+    cout << "voce deseja adicionar: ";
     cin >> nome_materia;
+    system("cls");
+    imprimeMolduraNota(3);
+    gotoxy(0,4);
     cout << "Digite a nota: " << endl;
     cin.ignore();
     getline(cin,nota);
@@ -96,14 +103,48 @@ void leNotas()
     {
         if(i%2==0)
         {
-            cout << "Materia: " << lista_notas[i] << endl;
+            system("cls");
+            gotoxy(0,3);
+            for(int i=0;i<80;i++) cout << "\xdb";
+            gotoxy(0,4);
+            cout << "Materia: " << lista_notas[i];
+            gotoxy(73,4);
+            cout << "num: " << i;
         }
         else
-        {
-            cout << "Nota: " << endl << lista_notas[i] << endl;
+        {   
+            imprimeMolduraNota(5);
+            gotoxy(0,7);
+            cout << lista_notas[i];
+            char resposta;
+            gotoxy(24,18);
+            cout << "Deseja continuar? [s/n]";
+            cin >> resposta;
+            if(resposta=='n') break;
         }
     }
-
-    system("pause");
 }
 
+void excluiNota()
+{
+    imprimeMoldura(8);
+    
+    int num_nota;
+
+    gotoxy(24,5);
+    cout << "\xb2 Entre com o numero da nota"; 
+    gotoxy(24,6);
+    cout << "que deseja apagar: ";
+    cin >> num_nota;
+
+    vector<string> lista_notas = leArquivo();
+    lista_notas.erase(lista_notas.begin()+num_nota);
+    lista_notas.erase(lista_notas.begin()+num_nota);
+    gravaNotas(lista_notas);
+}
+
+int qtdNotas()
+{
+    vector<string> lista_notas = leArquivo();
+    return lista_notas.size()/2;
+}
